@@ -10,7 +10,38 @@ In this delegates you could store:
 
 Calls to functions stored are extremely fast (like call to original function). Delegate takes minimum memory, are crossplatform and C++98, C++11, C++14 and later standart compatible.
 
-How to use:
+# What are we talking about?
+f.e. we have some functions (class functions, global functions, constant or not, whatever...) with same arguments and return value:
+```
+int func(std::string, size_t&); // regular function
+int func(SomeClass*, std::string, size_t&); // same but with class pointer
+int func(SomeOtherClass*, std::string, size_t&); // same but with class pointer
+int func(const SomeClass*, std::string, size_t&); // same but with class const pointer
+int func(const SomeOtherClass*, std::string, size_t&); // same but with class const pointer
+
+int SomeClass::mfunc(std::string, size_t&); // class member function
+int SomeClass::mcfunc(std::string, size_t&) const; // class member const function
+static int SomeClass::sfunc(std::string, size_t&); // class member static function
+static int SomeClass::sfunc(SomeOtherClass*, std::string, size_t&); // same but with class pointer
+static int SomeClass::sfunc(const SomeClass*, std::string, size_t&); // same but with class const pointer
+
+int SomeOtherClass::mfunc(std::string, size_t&); // class member function
+int SomeOtherClass::mcfunc(std::string, size_t&) const; // class member const function
+static int SomeOtherClass::sfunc(std::string, size_t&); // class member static function
+static int SomeOtherClass::sfunc(SomeOtherClass*, std::string, size_t&); // same but with class pointer
+static int SomeOtherClass::sfunc(const SomeClass*, std::string, size_t&); // same but with class const pointer
+
+// any other class actually...
+```
+and there is one delegate to rule them all:
+```
+// could contain any of functions above (with class pointer if needed):
+
+delegate<int, std::string, size_t&> allmighty_delegate;
+
+```
+
+# How to use:
 ```
 #include "delegates\delegate.h"
 
