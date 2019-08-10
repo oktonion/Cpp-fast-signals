@@ -79,8 +79,8 @@ namespace signals
     {
         namespace type_traits
         {
-            typedef char no_type;
-            struct yes_type { char padding[8]; };
+            struct no_type {};
+            struct yes_type { char padding[sizeof(no_type)]; };
             struct true_type { static const bool value = true; };
             struct false_type { static const bool value = false; };
 
