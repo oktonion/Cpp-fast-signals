@@ -77,15 +77,50 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-.vscode/.browse.VC.db
-.vscode/.BROWSE.VC.DB-shm
-.vscode/launch.json
+src/.vscode/.browse.VC.db
+src/.vscode/.BROWSE.VC.DB-shm
+src/.vscode/launch.json
 *.DB-wal
 
 # Visual Studio Code files
 *.vscode*
 
+# Visual Studio files
+*.vs*
+
 # old library
 /old/*
 /slib/*
 *.tar
+
+# cppcheck files
+*.a1
+*.cppcheck
+PhWidgets-cppcheck-build-dir/*
+
+# tests binaries
+/tests/bin/*
+
+# fuse
+*.fuse_*
+CppProperties.json
+
+
+cvs
+
+*~
+*.bak
+*.o
+*.a
+*.lo
+*.la
+*.user
+*.suo
+*.sdf
+*.opensdf
+
+bin/
+obj/
+ipch/
+
+*.obj
