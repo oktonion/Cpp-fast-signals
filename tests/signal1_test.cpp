@@ -1,6 +1,6 @@
 #include "./testsuit/testsuit.h"
 
-#include "..//delegates/delegate.h"
+#include "..//signals/signal.hpp"
 
 
 bool func_called = false;
