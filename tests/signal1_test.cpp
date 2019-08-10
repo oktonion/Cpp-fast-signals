@@ -10,39 +10,38 @@ void void_func_int(int)
     func_called = true;
 }
 
-void void_func_void_p_int(void*, int)
+void void_func_void_p(void*)
 {
     func_called = true;
 }
 
-TEST_CASE("Testing cpp delegate 1") {
+struct function_class
+{
+	void void_func(){}
+};
+
+
+TEST_CASE("Testing cpp signal 1") {
 	
-	using delegates::delegate;
-	using delegates::bind;
+    using signals::signal;
 
-	SUBCASE("Delegate 1 empty construction")
+	SUBCASE("signal 1 empty construction")
 	{
-		delegate<void, int> d1;
+		signal s1;
 		
-		CHECK(!d1);
+		//CHECK(!d1);
 	}
 
-	SUBCASE("Delegate 1 in-place construction")
+	SUBCASE("signal 1 connect")
 	{
-        delegate<void, int> d1(0);
-		
-		CHECK(!d1);
-	}
+        signal s1;
 
-	SUBCASE("Delegate 1 copy construction")
-	{
-        delegate<void, int> d1 = delegate<void, int>(&void_func_int);
+        s1.connect(&void_func);
 
-		CHECK(d1);
+        signals::detail::type_traits::is_bind_constructible<signal::functor, void*, void(*)(void*)>::value;
 
-        void *vptr;
-        int *iptr;
-
-        d1 = delegate<void, int>(vptr, &void_func_void_p_int);
+		void *ptr;
+		function_class *fcl_ptr;
+		s1.connect(ptr, &void_func_void_p);
 	}
 }
