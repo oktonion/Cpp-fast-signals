@@ -1,0 +1,12 @@
+#ifndef SIGNALS_TESTSUIT_H
+#define SIGNALS_TESTSUIT_H
+
+#ifndef DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+    #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+    #include "./doctest.h"
+#endif // DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+
+
+void void_func() {}
+
+#endif // SIGNALS_TESTSUIT_H
