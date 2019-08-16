@@ -80,14 +80,13 @@ namespace signals
         namespace type_traits
         {
             struct no_type {};
-            struct yes_type { char padding[sizeof(no_type)]; };
+            struct yes_type { char padding[sizeof(no_type) * 8]; };
             struct true_type { static const bool value = true; };
             struct false_type { static const bool value = false; };
 
             template<class T>
             yes_type operator,(T, no_type);
-            template<class T>
-            no_type operator,(no_type, T);
+            no_type operator,(no_type, no_type);
 
             template<class T> T declval();
             struct any_constructible { template<class T> any_constructible(T) { } };
@@ -98,8 +97,8 @@ namespace signals
         namespace type_traits
         {
             using signals::bind;
-            type_traits::no_type bind(type_traits::any_constructible);
-            type_traits::no_type bind(type_traits::any_constructible, type_traits::any_constructible);
+            //type_traits::no_type bind(type_traits::any_constructible);
+            //type_traits::no_type bind(type_traits::any_constructible, type_traits::any_constructible);
 
             template<class T>
             static yes_type is_constructible_tester(T, priority_tag<1>);
@@ -135,7 +134,7 @@ namespace signals
             {
                 static const bool value =
                     sizeof(
-                        bind(
+						type_traits::bind(
                             declval<T1>(),
                             declval<T2>()
                         ),
@@ -144,7 +143,7 @@ namespace signals
                     &&
                     sizeof(
                         is_constructible_tester<T>(
-                            bind(
+							type_traits::bind(
                                 declval<T1>(),
                                 declval<T2>()
                             ),
@@ -158,7 +157,7 @@ namespace signals
             {
                 static const bool value =
                     sizeof(
-                        bind(
+						type_traits::bind(
                             declval<T1>()
                         ),
                         declval<no_type>()
@@ -166,7 +165,7 @@ namespace signals
                     &&
                     sizeof(
                         is_constructible_tester<T>(
-                            bind(
+							type_traits::bind(
                                 declval<T1>()
                             ),
                             priority_tag<1>()
