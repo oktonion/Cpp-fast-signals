@@ -96,9 +96,9 @@ namespace signals
 
         namespace type_traits
         {
-            using signals::bind;
-            //type_traits::no_type bind(type_traits::any_constructible);
-            //type_traits::no_type bind(type_traits::any_constructible, type_traits::any_constructible);
+			using signals::bind;
+            type_traits::no_type bind(type_traits::any_constructible);
+            type_traits::no_type bind(type_traits::any_constructible, type_traits::any_constructible);
 
             template<class T>
             static yes_type is_constructible_tester(T, priority_tag<1>);
@@ -134,7 +134,7 @@ namespace signals
             {
                 static const bool value =
                     sizeof(
-						type_traits::bind(
+						bind(
                             declval<T1>(),
                             declval<T2>()
                         ),
@@ -143,7 +143,7 @@ namespace signals
                     &&
                     sizeof(
                         is_constructible_tester<T>(
-							type_traits::bind(
+							bind(
                                 declval<T1>(),
                                 declval<T2>()
                             ),
@@ -157,7 +157,7 @@ namespace signals
             {
                 static const bool value =
                     sizeof(
-						type_traits::bind(
+						bind(
                             declval<T1>()
                         ),
                         declval<no_type>()
@@ -165,7 +165,7 @@ namespace signals
                     &&
                     sizeof(
                         is_constructible_tester<T>(
-							type_traits::bind(
+							bind(
                                 declval<T1>()
                             ),
                             priority_tag<1>()
