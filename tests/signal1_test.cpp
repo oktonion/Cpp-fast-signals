@@ -48,6 +48,6 @@ TEST_CASE("Testing cpp signal 1") {
 		void *ptr;
 		function_class *fcl_ptr;
         
-		s1.connect(ptr, &void_func_int_p);
+		s1.connect(ptr, &void_func_void_p);
 	}
 }
