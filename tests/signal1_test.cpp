@@ -15,6 +15,11 @@ void void_func_void_p(void*)
     func_called = true;
 }
 
+void void_func_int_p(int*)
+{
+    func_called = true;
+}
+
 struct function_class
 {
 	void void_func(){}
@@ -38,10 +43,11 @@ TEST_CASE("Testing cpp signal 1") {
 
         s1.connect(&void_func);
 
-        signals::detail::type_traits::is_bind_constructible<signal::functor, void*, void(*)(void*)>::value;
+        int a[signals::detail::type_traits::is_bind_constructible<signal::functor, void*, void(*)(void*)>::value ? 1 : -1];
 
 		void *ptr;
 		function_class *fcl_ptr;
-		s1.connect(ptr, &void_func_void_p);
+        
+		s1.connect(ptr, &void_func_int_p);
 	}
 }
