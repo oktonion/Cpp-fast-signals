@@ -19,7 +19,7 @@ namespace signals
             template<bool, class T = void>
             struct enable_if { typedef T type; };
             template<class T>
-            struct enable_if<false, T> { typedef int type[sizeof(T) / sizeof(T) - sizeof(T) * 2]; };
+            struct enable_if<false, T> { typedef T type[sizeof(T)]; };
 
             template<class T, class From>
             struct is_constructible;
