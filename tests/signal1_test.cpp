@@ -45,7 +45,7 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK(s1.disconnect(&void_func) == true);
 		CHECK(s1.empty() == true);
 
-        int a[signals::detail::type_traits::is_bind_constructible<signal::functor, void*, void(*)(void*)>::value ? 1 : -1];
+        int a[signals::detail::type_traits::is_bind_constructible<signal::value_type, void*, void(*)(void*)>::value ? 1 : -1];
 
 		void *ptr;
 		function_class *fcl_ptr;
