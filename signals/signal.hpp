@@ -6,6 +6,9 @@
 
 #include "delegates/delegate.h"
 
+#include <algorithm>
+#include <utility>
+
 namespace signals
 {
     using namespace delegates;
@@ -36,22 +39,37 @@ namespace signals
     class signal
     {
     public:
-        typedef delegate<void> functor;
+        typedef delegate<void> value_type;
         typedef void result_type;
 
     public:
 
+        inline
         signal() {}
+
+        inline
+        signal(signal other) 
+        {
+            swap(other);
+        }
+
+        inline
         ~signal() {}
+
+        void swap(signal &other)
+        {
+            using std::swap;
+            
+        }
 
         template<class FunctorT>
         inline
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<functor, FunctorT>::value == (true) ||
+                is_bind_constructible<value_type, FunctorT>::value == (true) ||
             detail::type_traits::
-                is_constructible<functor, FunctorT>::value == (true),
+                is_constructible<value_type, FunctorT>::value == (true),
             connection
         >::type connect(FunctorT functor)
         {
@@ -63,7 +81,7 @@ namespace signals
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<functor, Arg1T, Arg2T>::value == (true),
+                is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             connection
         >::type connect(Arg1T arg1, Arg2T arg2)
         {
@@ -75,9 +93,9 @@ namespace signals
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<functor, FunctorT>::value == (true) ||
+                is_bind_constructible<value_type, FunctorT>::value == (true) ||
             detail::type_traits::
-                is_constructible<functor, FunctorT>::value == (true),
+                is_constructible<value_type, FunctorT>::value == (true),
             bool
         >::type disconnect(FunctorT functor)
         {
@@ -89,28 +107,32 @@ namespace signals
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<functor, Arg1T, Arg2T>::value == (true),
+                is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             bool
         >::type disconnect(Arg1T arg1, Arg2T arg2)
         {
             return true;
         }
-
+        
+        inline
         void clear() throw()
         {
 
         }
 
+        inline
         result_type emit() const
         {
 
         }
-
+        
+        inline
         result_type operator() () const
         {
             return emit();
         }
 
+        inline
         bool empty() const
         {
             return true;
