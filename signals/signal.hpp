@@ -70,6 +70,52 @@ namespace signals
             return connection();
         }
 
+        template<class FunctorT>
+        inline
+        typename
+        detail::type_traits::enable_if<
+            detail::type_traits::
+                is_bind_constructible<functor, FunctorT>::value == (true) ||
+            detail::type_traits::
+                is_constructible<functor, FunctorT>::value == (true),
+            bool
+        >::type disconnect(FunctorT functor)
+        {
+            return true;
+        }
+
+        template<class Arg1T, class Arg2T>
+        inline
+        typename
+        detail::type_traits::enable_if<
+            detail::type_traits::
+                is_bind_constructible<functor, Arg1T, Arg2T>::value == (true),
+            bool
+        >::type disconnect(Arg1T arg1, Arg2T arg2)
+        {
+            return true;
+        }
+
+        void clear() throw()
+        {
+
+        }
+
+        result_type emit() const
+        {
+
+        }
+
+        result_type operator() () const
+        {
+            return emit();
+        }
+
+        bool empty() const
+        {
+            return true;
+        }
+
     private:
 
     };
