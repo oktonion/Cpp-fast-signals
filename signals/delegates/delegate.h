@@ -53,15 +53,15 @@ namespace delegates
         typedef ReturnT(delegate::* f_proxy_type)() const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -194,15 +194,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -333,15 +333,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -472,15 +472,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -611,15 +611,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -750,15 +750,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -889,15 +889,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -1028,15 +1028,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -1167,15 +1167,15 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const;
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type &get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type &get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
