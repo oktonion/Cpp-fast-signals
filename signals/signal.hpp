@@ -41,26 +41,52 @@ namespace signals
     class signal
     {
     public:
-        typedef delegate<void> functor;
+        typedef delegate<void> value_type;
         typedef void result_type;
 
     public:
 
+        inline
         signal() {}
+
+        inline
+        signal(const signal &other) 
+        {
+            signal tmp = other;
+            swap(tmp);
+        }
+
+        inline
         ~signal() {}
+
+        inline
+        void swap(signal &other)
+        {
+            using std::swap;
+            
+            swap(_functors, other._functors);
+        }
+
+        inline
+        signal& operator=(const signal &other)
+        {
+            signal tmp = other;
+            swap(tmp);
+            return *this;
+        }
 
         template<class FunctorT>
         inline
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<functor, FunctorT>::value == (true) ||
+                is_bind_constructible<value_type, FunctorT>::value == (true) ||
             detail::type_traits::
-                is_constructible<functor, FunctorT>::value == (true),
+                is_constructible<value_type, FunctorT>::value == (true),
             connection
         >::type connect(FunctorT functor)
         {
-            return connection();
+            return _connect(functor);
         }
 
         template<class Arg1T, class Arg2T>
@@ -68,15 +94,99 @@ namespace signals
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<functor, Arg1T, Arg2T>::value == (true),
+                is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             connection
         >::type connect(Arg1T arg1, Arg2T arg2)
         {
-            return connection();
+            return _connect(bind(arg1, arg2));
+        }
+
+        template<class FunctorT>
+        inline
+        typename
+        detail::type_traits::enable_if<
+            detail::type_traits::
+                is_bind_constructible<value_type, FunctorT>::value == (true) ||
+            detail::type_traits::
+                is_constructible<value_type, FunctorT>::value == (true),
+            bool
+        >::type disconnect(FunctorT functor)
+        {
+            return _disconnect(functor);
+        }
+
+        template<class Arg1T, class Arg2T>
+        inline
+        typename
+        detail::type_traits::enable_if<
+            detail::type_traits::
+                is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
+            bool
+        >::type disconnect(Arg1T arg1, Arg2T arg2)
+        {
+            return _disconnect(bind(arg1, arg2));
+        }
+        
+        inline
+        void clear() throw()
+        {
+            _functors.clear();
+        }
+
+        inline
+        result_type emit() const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))();
+            }
+        }
+        
+        inline
+        result_type operator() () const
+        {
+            return emit();
+        }
+
+        inline
+        bool empty() const
+        {
+            return _functors.empty();
         }
 
     private:
+        std::set<value_type> _functors;
 
+        inline
+        connection _connect(value_type value)
+        {
+            _functors.insert(value);
+            return connection();
+        }
+
+        template<class T>
+        inline
+        connection _connect(const T &value)
+        {
+            return _connect(bind(value));
+        }
+
+        inline
+        bool _disconnect(value_type value)
+        {
+            std::set<value_type>::size_type size = _functors.size();
+            _functors.erase(value);
+            return (size != _functors.size());
+        }
+
+        template<class T>
+        inline
+        bool _disconnect(const T &value)
+        {
+            return _disconnect(bind(value));
+        }
     };
 
 
