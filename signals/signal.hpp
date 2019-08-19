@@ -57,6 +57,7 @@ namespace signals
         inline
         ~signal() {}
 
+        inline
         void swap(signal &other)
         {
             using std::swap;
@@ -64,7 +65,8 @@ namespace signals
             swap(_functors, other._functors);
         }
 
-        signal& operator=(const signal& other)
+        inline
+        signal& operator=(const signal &other)
         {
             signal tmp = other;
             swap(tmp);
