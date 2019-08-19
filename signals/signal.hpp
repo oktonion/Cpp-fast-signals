@@ -48,9 +48,10 @@ namespace signals
         signal() {}
 
         inline
-        signal(signal other) 
+        signal(const signal &other) 
         {
-            swap(other);
+            signal tmp = other;
+            swap(tmp);
         }
 
         inline
@@ -60,6 +61,13 @@ namespace signals
         {
             using std::swap;
             
+        }
+
+        signal& operator=(const signal& other)
+        {
+            signal tmp = other;
+            swap(tmp);
+            return *this;
         }
 
         template<class FunctorT>
