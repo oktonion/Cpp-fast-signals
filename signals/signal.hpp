@@ -6,6 +6,11 @@
 
 #include "delegates/delegate.h"
 
+#include <algorithm>
+#include <utility>
+#include <set>
+
+
 namespace signals
 {
     using namespace delegates;
