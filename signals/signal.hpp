@@ -61,6 +61,7 @@ namespace signals
         {
             using std::swap;
             
+            swap(_functors, other._functors);
         }
 
         signal& operator=(const signal& other)
@@ -81,7 +82,7 @@ namespace signals
             connection
         >::type connect(FunctorT functor)
         {
-            return connection();
+            return _connect(functor);
         }
 
         template<class Arg1T, class Arg2T>
@@ -93,7 +94,7 @@ namespace signals
             connection
         >::type connect(Arg1T arg1, Arg2T arg2)
         {
-            return connection();
+            return _connect(bind(arg1, arg2));
         }
 
         template<class FunctorT>
@@ -131,7 +132,7 @@ namespace signals
         inline
         result_type emit() const
         {
-
+            return;
         }
         
         inline
@@ -147,7 +148,36 @@ namespace signals
         }
 
     private:
+        std::set<value_type> _functors;
 
+        inline
+        connection _connect(value_type value)
+        {
+            _functors.insert(value);
+            return connection();
+        }
+
+        template<class T>
+        inline
+        connection _connect(const T &value)
+        {
+            return _connect(bind(value));
+        }
+
+        inline
+        bool _disconnect(value_type value)
+        {
+            std::set<value_type>::size_type size = _functors.size();
+            _functors.erase(value);
+            return (size != _functors.size());
+        }
+
+        template<class T>
+        inline
+        bool _disconnect(const T &value)
+        {
+            return _disconnect(bind(value));
+        }
     };
 
 
