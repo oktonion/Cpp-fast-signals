@@ -110,7 +110,7 @@ namespace signals
             bool
         >::type disconnect(FunctorT functor)
         {
-            return true;
+            return _disconnect(functor);
         }
 
         template<class Arg1T, class Arg2T>
@@ -122,19 +122,24 @@ namespace signals
             bool
         >::type disconnect(Arg1T arg1, Arg2T arg2)
         {
-            return true;
+            return _disconnect(bind(arg1, arg2));
         }
         
         inline
         void clear() throw()
         {
-
+            _functors.clear();
         }
 
         inline
         result_type emit() const
         {
-            return;
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))();
+            }
         }
         
         inline
@@ -146,7 +151,7 @@ namespace signals
         inline
         bool empty() const
         {
-            return true;
+            return _functors.empty();
         }
 
     private:
