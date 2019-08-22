@@ -74,15 +74,19 @@ namespace signals
             swap(tmp);
             return *this;
         }
+        
+        inline
+        connection connect(value_type functor)
+        {
+            return _connect(functor);
+        }
 
         template<class FunctorT>
         inline
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<value_type, FunctorT>::value == (true) ||
-            detail::type_traits::
-                is_constructible<value_type, FunctorT>::value == (true),
+                is_bind_constructible<value_type, FunctorT>::value == (true),
             connection
         >::type connect(FunctorT functor)
         {
