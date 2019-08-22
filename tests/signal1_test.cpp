@@ -52,12 +52,27 @@ TEST_CASE("Testing cpp signal 1") {
 		void *ptr;
 		function_class *fcl_ptr;
 
-		signal::value_type d1(ptr, &void_func_void_p);
+		signal::value_type
+			d1(ptr, &void_func_void_p),
+			dd1(ptr, &void_func_void_p),
+			ddd1(d1);
 
 		CHECK(s1.empty() == true);
 		s1.connect(d1);
 		CHECK(s1.empty() == false);
 		CHECK(s1.disconnect(d1) == true);
+		CHECK(s1.empty() == true);
+
+		CHECK(s1.empty() == true);
+		s1.connect(d1);
+		CHECK(s1.empty() == false);
+		CHECK(s1.disconnect(dd1) == true);
+		CHECK(s1.empty() == true);
+
+		CHECK(s1.empty() == true);
+		s1.connect(d1);
+		CHECK(s1.empty() == false);
+		CHECK(s1.disconnect(ddd1) == true);
 		CHECK(s1.empty() == true);
         
 		CHECK(s1.empty() == true);
