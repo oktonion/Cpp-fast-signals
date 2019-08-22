@@ -8,6 +8,8 @@
 
 #include <algorithm>
 #include <utility>
+#include <set>
+
 
 namespace signals
 {
