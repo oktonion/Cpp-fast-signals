@@ -35,11 +35,17 @@ namespace delegates
 		struct DelegateMementoHack :
 			public fastdelegate::DelegateMemento
 		{
-			static
-			void swap_pthis(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
+			void swap_pthis_hack(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
 			{
 				using std::swap;
 				swap(memento1.*(&fastdelegate::DelegateMemento::m_pthis), memento2.*(&fastdelegate::DelegateMemento::m_pthis));
+			}
+
+			static
+			void swap_pthis(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
+			{
+				DelegateMementoHack hack;
+				hack.swap_pthis_hack(memento1, memento2);
 			}
 		};
 	}
