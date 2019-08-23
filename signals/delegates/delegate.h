@@ -38,7 +38,7 @@ namespace delegates
 			void swap_pthis_hack(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
 			{
 				using std::swap;
-				swap(memento1.*(&fastdelegate::DelegateMemento::m_pthis), memento2.*(&fastdelegate::DelegateMemento::m_pthis));
+				swap(memento1.*(&DelegateMementoHack::m_pthis), memento2.*(&DelegateMementoHack::m_pthis));
 			}
 
 			static
