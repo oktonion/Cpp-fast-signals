@@ -57,12 +57,12 @@ TEST_CASE("Testing cpp signal 1") {
 			dd1(ptr, &void_func_void_p),
 			ddd1(d1);
 
-		CHECK_EQ(d1, dd1);
-		CHECK_EQ(dd1, d1);
-		CHECK_EQ(d1, ddd1);
-		CHECK_EQ(ddd1, d1);
-		CHECK_EQ(dd1, ddd1);
-		CHECK_EQ(ddd1, dd1);
+		CHECK(d1 == dd1);
+		CHECK(dd1 == d1);
+		CHECK(d1 == ddd1);
+		CHECK(ddd1 == d1);
+		CHECK(dd1 == ddd1);
+		CHECK(ddd1 == dd1);
 
 		CHECK(s1.empty() == true);
 		s1.connect(d1);
