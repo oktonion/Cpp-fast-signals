@@ -679,8 +679,6 @@ namespace doctest
 // - relational operators as free functions - taking const char* as one of the params
 class DOCTEST_INTERFACE String
 {
-    static const unsigned len  = 24;      //!OCLINT avoid private static members
-    static const unsigned last = len - 1; //!OCLINT avoid private static members
 
     struct view // len should be more than sizeof(view) - because of the final byte for flags
     {
@@ -689,9 +687,12 @@ class DOCTEST_INTERFACE String
         unsigned capacity;
     };
 
+    static const unsigned len  = sizeof(view) > 24 ? sizeof(view) : 24;      //!OCLINT avoid private static members
+    static const unsigned last = len - 1; //!OCLINT avoid private static members
+
     union
     {
-        char buf[24];
+        char buf[sizeof(view) > 24 ? sizeof(view) : 24];
         view data;
     };
 
