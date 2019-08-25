@@ -428,6 +428,44 @@ namespace delegates
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+		}
 
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(Y*, Param1T)) {
@@ -609,6 +647,44 @@ namespace delegates
 			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
 		}
 
 		template < class Y >
@@ -792,6 +868,44 @@ namespace delegates
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+		}
 
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T)) {
@@ -973,6 +1087,44 @@ namespace delegates
 			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
 		}
 
 		template < class Y >
@@ -1156,6 +1308,44 @@ namespace delegates
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+		}
 
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) {
@@ -1337,6 +1527,44 @@ namespace delegates
 			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
 		}
 
 		template < class Y >
@@ -1520,6 +1748,44 @@ namespace delegates
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+		}
 
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
@@ -1698,6 +1964,44 @@ namespace delegates
 			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
 			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+		
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
 		}
 
 		template < class Y >
