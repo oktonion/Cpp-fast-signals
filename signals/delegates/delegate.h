@@ -67,16 +67,6 @@ namespace delegates
 				rhs.*(&DelegateMementoHack::m_pthis) = NULL;
 				return lhs.IsLess(rhs);
 			}
-
-			static
-			bool is_less_pFunction(const fastdelegate::DelegateMemento &memento1, const fastdelegate::DelegateMemento &memento2)
-			{
-				fastdelegate::DelegateMemento 
-					lhs, rhs;
-				lhs.*(&DelegateMementoHack::m_pFunction) = memento1.*(&DelegateMementoHack::m_pFunction);
-				rhs.*(&DelegateMementoHack::m_pFunction) = memento2.*(&DelegateMementoHack::m_pFunction);
-				return lhs.IsLess(rhs);
-			}
 		};
 	}
 
