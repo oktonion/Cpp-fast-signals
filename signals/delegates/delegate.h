@@ -197,7 +197,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -215,7 +215,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -226,7 +226,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -418,7 +418,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -436,7 +436,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -447,7 +447,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -638,7 +638,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -656,7 +656,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -667,7 +667,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -858,7 +858,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -876,7 +876,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -887,7 +887,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -1078,7 +1078,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -1096,7 +1096,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -1107,7 +1107,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -1298,7 +1298,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -1316,7 +1316,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -1327,7 +1327,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -1518,7 +1518,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -1536,7 +1536,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -1547,7 +1547,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -1738,7 +1738,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -1756,7 +1756,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -1767,7 +1767,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
@@ -1955,7 +1955,7 @@ namespace delegates
 				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
 			
 			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
-				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+				return detail::DelegateMementoHack::is_equal_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 			else
 				return false;
 		}
@@ -1973,7 +1973,7 @@ namespace delegates
 				return m_pthis < other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func < other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(*this)).GetMemento(), (base_type(other)).GetMemento());
 		}
 
 		bool operator>(const delegate &other) const 
@@ -1984,7 +1984,7 @@ namespace delegates
 				return m_pthis > other.m_pthis;
 			if(m_free_func != other.m_free_func)
 				return m_free_func > other.m_free_func;
-			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
+			return detail::DelegateMementoHack::is_less_pFunction((base_type(other)).GetMemento(), (base_type(*this)).GetMemento());
 		}
 
 		template < class Y >
