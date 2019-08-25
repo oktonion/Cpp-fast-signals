@@ -27,6 +27,53 @@ namespace delegates
 	namespace detail
 	{
 		typedef fastdelegate::detail::DefaultVoid DefaultVoid;
+
+		struct DelegateMementoHack :
+			public fastdelegate::DelegateMemento
+		{
+			void swap_pthis_hack(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
+			{
+				using std::swap;
+				swap(memento1.*(&DelegateMementoHack::m_pthis), memento2.*(&DelegateMementoHack::m_pthis));
+			}
+
+			static
+			void swap_pthis(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
+			{
+				using std::swap;
+				swap(memento1.*(&DelegateMementoHack::m_pthis), memento2.*(&DelegateMementoHack::m_pthis));
+			}
+
+			static
+			bool is_equal_pFunction(const fastdelegate::DelegateMemento &memento1, const fastdelegate::DelegateMemento &memento2)
+			{
+				fastdelegate::DelegateMemento 
+					lhs(memento1), rhs(memento2);
+				lhs.*(&DelegateMementoHack::m_pthis) = NULL;
+				rhs.*(&DelegateMementoHack::m_pthis) = NULL;
+				return lhs.IsEqual(rhs);
+			}
+
+			static
+			bool is_less_pFunction(const fastdelegate::DelegateMemento &memento1, const fastdelegate::DelegateMemento &memento2)
+			{
+				fastdelegate::DelegateMemento 
+					lhs(memento1), rhs(memento2);
+				lhs.*(&DelegateMementoHack::m_pthis) = NULL;
+				rhs.*(&DelegateMementoHack::m_pthis) = NULL;
+				return lhs.IsLess(rhs);
+			}
+
+			static
+			bool is_less_pFunction(const fastdelegate::DelegateMemento &memento1, const fastdelegate::DelegateMemento &memento2)
+			{
+				fastdelegate::DelegateMemento 
+					lhs, rhs;
+				lhs.*(&DelegateMementoHack::m_pFunction) = memento1.*(&DelegateMementoHack::m_pFunction);
+				rhs.*(&DelegateMementoHack::m_pFunction) = memento2.*(&DelegateMementoHack::m_pFunction);
+				return lhs.IsLess(rhs);
+			}
+		};
 	}
 
 	template <
@@ -69,18 +116,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)( ))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)( ) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -88,7 +144,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -96,7 +152,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -104,14 +160,55 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)( ))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
+		}
+
+		bool operator==(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) == static_cast<const base_type&>(other) );
+			
+			if(m_pthis == other.m_pthis && m_free_func == other.m_free_func)
+				return detail::DelegateMementoHack::is_equal_pFunction(base_type::GetMemento(), other.GetMemento());
+			else
+				return false;
+		}
+
+		bool operator!=(const delegate &other) const 
+		{
+			return !(*this == other);
+		}
+
+		bool operator<(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) < static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis < other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func < other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(base_type::GetMemento(), other.GetMemento());
+		}
+
+		bool operator>(const delegate &other) const 
+		{
+			if(!m_free_func && !other.m_free_func)
+				return ( static_cast<const base_type&>(*this) > static_cast<const base_type&>(other) );
+			if(m_pthis != other.m_pthis)
+				return m_pthis > other.m_pthis;
+			if(m_free_func != other.m_free_func)
+				return m_free_func > other.m_free_func;
+			return detail::DelegateMementoHack::is_less_pFunction(other.GetMemento(), base_type::GetMemento());
 		}
 
 		template < class Y >
@@ -210,18 +307,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -229,7 +335,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -237,7 +343,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -245,11 +351,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -349,18 +458,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -368,7 +486,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -376,7 +494,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -384,11 +502,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -488,18 +609,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -507,7 +637,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -515,7 +645,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -523,11 +653,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -627,18 +760,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -646,7 +788,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -654,7 +796,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -662,11 +804,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -766,18 +911,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -785,7 +939,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -793,7 +947,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -801,11 +955,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -905,18 +1062,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -924,7 +1090,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -932,7 +1098,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -940,11 +1106,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -1044,18 +1213,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -1063,7 +1241,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -1071,7 +1249,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -1079,11 +1257,14 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
-			: base_type(function_to_bind) { }
+			: base_type(function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		void operator = (const base_type &x) {
 			*static_cast<base_type*>(this) = x;
@@ -1183,18 +1364,27 @@ namespace delegates
 
 		typedef delegate type;
 
-		delegate() : base_type() { }
+		delegate() 
+			: base_type(),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(Y * pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
-			: base_type(pthis, function_to_bind) { }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class X, class Y >
 		delegate(const Y *pthis,
 			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const)
-			: base_type(pthis, function_to_bind)
-		{  }
+			: base_type(pthis, function_to_bind),
+			m_pthis(NULL),
+			m_free_func(NULL)  
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -1202,7 +1392,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis(static_cast<void*>(pthis)),
 			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(Y *pthis,
@@ -1210,7 +1400,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
@@ -1218,7 +1408,7 @@ namespace delegates
 			: base_type(this, get_proxy(pthis, function_to_bind)),
 			m_pthis_const(static_cast<const void*>(pthis)),
 			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
-		{  	}
+		{ }
 
 
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
