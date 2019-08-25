@@ -22,6 +22,10 @@
 
 #include "FastDelegate.h"
 
+#include <algorithm>
+#include <utility>
+#include <cstring>
+
 namespace delegates
 {
 	namespace detail
@@ -100,14 +104,17 @@ namespace delegates
         typedef ReturnT(delegate::* f_proxy_type)() const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -169,8 +176,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{ 
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		bool operator==(const delegate &other) const 
@@ -249,9 +284,8 @@ namespace delegates
 			base_type::bind(function_to_bind);
 		}
 
-
-
 	private:
+
 		union
 		{
 			const void *m_pthis_const;
@@ -291,14 +325,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -360,8 +397,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -442,14 +507,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -511,8 +579,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -593,14 +689,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -662,8 +761,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -744,14 +871,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -813,8 +943,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -895,14 +1053,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -964,8 +1125,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -1046,14 +1235,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -1115,8 +1307,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -1197,14 +1417,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -1266,8 +1489,36 @@ namespace delegates
 			m_free_func(NULL)  
 		{ }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
@@ -1348,14 +1599,17 @@ namespace delegates
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const;
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
+        inline
         f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
@@ -1414,8 +1668,36 @@ namespace delegates
 		delegate(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
 			: base_type(function_to_bind) { }
 
-		void operator = (const base_type &x) {
-			*static_cast<base_type*>(this) = x;
+		delegate(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
+		}
+
+		void operator=(const delegate &other)
+		{
+			{
+				f_proxy_type proxy = &delegate::f_proxy<delegate>;
+				base_type::bind(this, proxy);
+				fastdelegate::DelegateMemento tmp = other.GetMemento();
+				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				base_type::SetMemento(tmp);
+			}
+			using namespace std;
+			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
+			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
+			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
+			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		template < class Y >
