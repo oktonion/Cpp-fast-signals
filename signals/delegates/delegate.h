@@ -35,17 +35,10 @@ namespace delegates
 		struct DelegateMementoHack :
 			public fastdelegate::DelegateMemento
 		{
-			void swap_pthis_hack(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
-			{
-				using std::swap;
-				swap(memento1.*(&DelegateMementoHack::m_pthis), memento2.*(&DelegateMementoHack::m_pthis));
-			}
-
 			static
-			void swap_pthis(fastdelegate::DelegateMemento& memento1, fastdelegate::DelegateMemento& memento2)
+			void copy_pthis(fastdelegate::DelegateMemento &memento_to, const fastdelegate::DelegateMemento &memento_from)
 			{
-				using std::swap;
-				swap(memento1.*(&DelegateMementoHack::m_pthis), memento2.*(&DelegateMementoHack::m_pthis));
+				memento_to.*(&DelegateMementoHack::m_pthis) = memento_from.*(&DelegateMementoHack::m_pthis);
 			}
 
 			static
@@ -172,7 +165,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -188,7 +181,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -393,7 +386,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -409,7 +402,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -613,7 +606,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -629,7 +622,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -833,7 +826,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -849,7 +842,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1053,7 +1046,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1069,7 +1062,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1273,7 +1266,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1289,7 +1282,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1493,7 +1486,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1509,7 +1502,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1713,7 +1706,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1729,7 +1722,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1930,7 +1923,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
@@ -1946,7 +1939,7 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				detail::DelegateMementoHack::swap_pthis(tmp, base_type::GetMemento());
+				detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
