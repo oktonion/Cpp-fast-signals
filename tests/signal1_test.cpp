@@ -38,7 +38,6 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK((s1 == NULL));
 		CHECK_FALSE((s1  != NULL));
 		CHECK(s1.empty() == true);
-		CHECK(false == s1);
 		CHECK_FALSE(s1);
 	}
 
