@@ -143,37 +143,37 @@ namespace signals
         }
 
         inline
-        bool empty() const
+        bool empty() const throw()
         {
             return _functors.empty();
         }
 
         inline 
-        bool operator!() const
+        bool operator!() const throw()
         {
             return empty(); 
         }
 
         inline
-        bool operator==(const signal_base &other)
+        bool operator==(const signal_base &other) throw()
         {
             return _functors == other._functors;
         }
 
         inline
-        bool operator!=(const signal_base &other)
+        bool operator!=(const signal_base &other) throw()
         {
             return _functors != other._functors;
         }
 
         inline
-        bool operator>(const signal_base &other)
+        bool operator>(const signal_base &other) throw()
         {
             return _functors > other._functors;
         }
 
         inline
-        bool operator<(const signal_base &other)
+        bool operator<(const signal_base &other) throw()
         {
             return _functors < other._functors;
         }
@@ -187,18 +187,18 @@ namespace signals
     
     public:
         inline 
-        operator unspecified_bool_type() const 
+        operator unspecified_bool_type() const  throw()
         {
             return empty()? 0: &SafeBoolStruct::m_nonzero;
         }
         // necessary to allow ==0 to work despite the safe_bool idiom
         inline 
-        bool operator==(const SafeBoolStruct *) const
+        bool operator==(const SafeBoolStruct *) const throw()
         {
             return empty();
         }
         inline 
-        bool operator!=(const SafeBoolStruct *) const
+        bool operator!=(const SafeBoolStruct *) const throw()
         { 
             return !empty();
         }
@@ -513,8 +513,8 @@ namespace signals
             struct false_type { static const bool value = false; };
 
             template<class T>
-            yes_type operator,(T, no_type);
-            no_type operator,(no_type, no_type);
+            yes_type operator,(const T&, no_type);
+            //no_type operator,(no_type, no_type);
 
             template<class T> T declval();
             struct any_constructible { template<class T> any_constructible(T) { } };
@@ -525,8 +525,8 @@ namespace signals
         namespace type_traits
         {
 			using signals::bind;
-            type_traits::no_type bind(type_traits::any_constructible);
-            type_traits::no_type bind(type_traits::any_constructible, type_traits::any_constructible);
+            void bind(type_traits::any_constructible);
+            void bind(type_traits::any_constructible, type_traits::any_constructible);
 
             template<class T>
             static yes_type is_constructible_tester(T, priority_tag<1>);
@@ -558,17 +558,9 @@ namespace signals
             struct conditional<false, IfTrue, IfFalse> { typedef IfFalse type; };
 
             template<class T, class T1, class T2>
-            struct is_bind_constructible
+            struct is_bind_constructible_impl
             {
                 static const bool value =
-                    sizeof(
-						bind(
-                            declval<T1>(),
-                            declval<T2>()
-                        ),
-                        declval<no_type>()
-                    ) != sizeof(no_type)
-                    &&
                     sizeof(
                         is_constructible_tester<T>(
 							bind(
@@ -581,16 +573,9 @@ namespace signals
             };
 
             template<class T, class T1>
-            struct is_bind_constructible<T, T1, void_type>
+            struct is_bind_constructible_impl<T, T1, void_type>
             {
                 static const bool value =
-                    sizeof(
-						bind(
-                            declval<T1>()
-                        ),
-                        declval<no_type>()
-                    ) != sizeof(no_type)
-                    &&
                     sizeof(
                         is_constructible_tester<T>(
 							bind(
@@ -600,6 +585,40 @@ namespace signals
                         )
                     ) == sizeof(yes_type);
             };
+
+            template<class T, class T1, class T2>
+            struct has_bind
+            {
+                static const bool value =
+                    sizeof(
+						bind(
+                            declval<T1>(),
+                            declval<T2>()
+                        ),
+                        declval<no_type>()
+                    ) != sizeof(no_type);
+            };
+
+            template<class T, class T1>
+            struct has_bind<T, T1, void_type>
+            {
+                static const bool value =
+                    sizeof(
+						bind(
+                            declval<T1>()
+                        ),
+                        declval<no_type>()
+                    ) != sizeof(no_type);
+            };
+
+            template<class T, class T1, class T2>
+            struct is_bind_constructible:
+                conditional<
+                    has_bind<T, T1, T2>::value == (true),
+                    is_bind_constructible_impl<T, T1, T2>,
+                    false_type
+                >::type
+            { };
         }
     }
 
