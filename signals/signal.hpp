@@ -225,7 +225,7 @@ namespace signals
         inline
         bool _disconnect(const value_type &value)
         {
-            std::set<value_type>::size_type size = _functors.size();
+            typename std::set<value_type>::size_type size = _functors.size();
             _functors.erase(value);
             return (size != _functors.size());
         }
