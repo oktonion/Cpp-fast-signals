@@ -263,7 +263,7 @@ namespace signals
         inline
         result_type emit() const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -288,7 +288,7 @@ namespace signals
         inline
         result_type emit(Param1T p1) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -313,7 +313,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -338,7 +338,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2, Param3T p3) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -363,7 +363,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -388,7 +388,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -413,7 +413,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -438,7 +438,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
@@ -463,7 +463,7 @@ namespace signals
         inline
         result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8) const
         {
-            typedef std::set<value_type>::const_iterator const_iterator;
+            typedef typename std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
