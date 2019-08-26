@@ -72,8 +72,8 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK(s1.disconnect(&void_func) == true);
 		CHECK(s1.empty() == true);
 
-		void *ptr;
-		function_class *fcl_ptr;
+		void *ptr = NULL;
+		function_class *fcl_ptr = NULL;
 
 		signal::value_type
 			d1(ptr, &void_func_void_p),
