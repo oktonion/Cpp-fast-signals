@@ -88,7 +88,7 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, FunctorT>::value == (true),
             connection
-        >::type connect(FunctorT &functor)
+        >::type connect(FunctorT functor)
         {
             return _connect(functor);
         }
@@ -100,7 +100,7 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             connection
-        >::type connect(Arg1T &arg1, Arg2T &arg2)
+        >::type connect(Arg1T arg1, Arg2T arg2)
         {
             return _connect(bind(arg1, arg2));
         }
@@ -118,7 +118,7 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, FunctorT>::value == (true),
             bool
-        >::type disconnect(FunctorT &functor)
+        >::type disconnect(FunctorT functor)
         {
             return _disconnect(functor);
         }
@@ -130,7 +130,7 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             bool
-        >::type disconnect(Arg1T &arg1, Arg2T &arg2)
+        >::type disconnect(Arg1T arg1, Arg2T arg2)
         {
             return _disconnect(bind(arg1, arg2));
         }
