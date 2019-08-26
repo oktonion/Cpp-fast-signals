@@ -41,6 +41,27 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK_FALSE(s1);
 	}
 
+	SUBCASE("signal 1 comparison")
+	{
+		signal s1, ss1;
+		
+		CHECK(s1 == s1);
+		CHECK(s1 == ss1);
+		CHECK(ss1 == s1);
+		
+		CHECK_FALSE(s1 != s1);
+		CHECK_FALSE(s1 != ss1);
+		CHECK_FALSE(ss1 != s1);
+
+		CHECK_FALSE(s1 < s1);
+		CHECK_FALSE(s1 < ss1);
+		CHECK_FALSE(ss1 < s1);
+
+		CHECK_FALSE(s1 > s1);
+		CHECK_FALSE(s1 > ss1);
+		CHECK_FALSE(ss1 > s1);
+	}
+
 	SUBCASE("signal 1 connect")
 	{
         signal s1;
