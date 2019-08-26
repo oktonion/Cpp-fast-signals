@@ -169,6 +169,30 @@ namespace signals
         {
             return empty(); 
         }
+
+        inline
+        bool operator==(const signal &other)
+        {
+            return _functors == other._functors;
+        }
+
+        inline
+        bool operator!=(const signal &other)
+        {
+            return _functors != other._functors;
+        }
+
+        inline
+        bool operator>(const signal &other)
+        {
+            return _functors > other._functors;
+        }
+
+        inline
+        bool operator<(const signal &other)
+        {
+            return _functors < other._functors;
+        }
     private:
         typedef result_type (*StaticFunctionPtr)();
         typedef struct SafeBoolStruct {
