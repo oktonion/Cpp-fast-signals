@@ -263,7 +263,7 @@ namespace signals
         inline
         result_type emit() const
         {
-            typedef typename std::set<value_type>::const_iterator const_iterator;
+            typedef std::set<value_type>::const_iterator const_iterator;
 
             for (const_iterator it = _functors.begin(); it != _functors.end(); )
             {
