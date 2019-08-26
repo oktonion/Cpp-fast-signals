@@ -34,7 +34,10 @@ TEST_CASE("Testing cpp signal 1") {
 	{
 		signal s1;
 		
-		//CHECK(!d1);
+		CHECK(!s1);
+		CHECK(s1 == NULL);
+		CHECK_FALSE(s1 != NULL);
+		CHECK(s1.empty() == true);
 	}
 
 	SUBCASE("signal 1 connect")
