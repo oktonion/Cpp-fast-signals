@@ -112,9 +112,10 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK(s1.empty() == true);
 
 		function_class obj;
+		d1 = signals::bind(&obj, &function_class::void_func);
 		s1.connect(&obj, &function_class::void_func);
 		CHECK(s1.empty() == false);
-		CHECK(s1.disconnect(&obj, &function_class::void_func) == true);
+		CHECK(s1.disconnect(d1) == true);
 		CHECK(s1.empty() == true);
 	}
 
