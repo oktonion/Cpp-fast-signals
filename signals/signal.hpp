@@ -38,29 +38,30 @@ namespace signals
 
     struct connection {};
 
-    class signal
+    template<class ValueType, class ResultType>
+    class signal_base
     {
     public:
-        typedef delegate<void> value_type;
-        typedef void result_type;
+        typedef ValueType value_type;
+        typedef ResultType result_type;
 
     public:
 
         inline
-        signal() {}
+        signal_base() {}
 
         inline
-        signal(const signal &other) 
+        signal_base(const signal_base &other) 
         {
-            signal tmp = other;
+            signal_base tmp = other;
             swap(tmp);
         }
 
         inline
-        ~signal() {}
+        ~signal_base() {}
 
         inline
-        void swap(signal &other)
+        void swap(signal_base &other)
         {
             using std::swap;
             
@@ -68,9 +69,9 @@ namespace signals
         }
 
         inline
-        signal& operator=(const signal &other)
+        signal_base& operator=(const signal_base &other)
         {
-            signal tmp = other;
+            signal_base tmp = other;
             swap(tmp);
             return *this;
         }
@@ -142,23 +143,6 @@ namespace signals
         }
 
         inline
-        result_type emit() const
-        {
-            typedef std::set<value_type>::const_iterator const_iterator;
-
-            for (const_iterator it = _functors.begin(); it != _functors.end(); )
-            {
-                (*(it++))();
-            }
-        }
-        
-        inline
-        result_type operator() () const
-        {
-            return emit();
-        }
-
-        inline
         bool empty() const
         {
             return _functors.empty();
@@ -171,25 +155,25 @@ namespace signals
         }
 
         inline
-        bool operator==(const signal &other)
+        bool operator==(const signal_base &other)
         {
             return _functors == other._functors;
         }
 
         inline
-        bool operator!=(const signal &other)
+        bool operator!=(const signal_base &other)
         {
             return _functors != other._functors;
         }
 
         inline
-        bool operator>(const signal &other)
+        bool operator>(const signal_base &other)
         {
             return _functors > other._functors;
         }
 
         inline
-        bool operator<(const signal &other)
+        bool operator<(const signal_base &other)
         {
             return _functors < other._functors;
         }
@@ -219,8 +203,10 @@ namespace signals
             return !empty();
         }
 
-    private:
+    protected:
         std::set<value_type> _functors;
+    
+    private:
 
         inline
         connection _connect(const value_type &value)
@@ -249,6 +235,246 @@ namespace signals
         bool _disconnect(const T &value)
         {
             return _disconnect(bind(value));
+        }
+    };
+
+    namespace detail
+    {
+        typedef fastdelegate::detail::DefaultVoid DefaultVoid;
+    }
+
+	template <
+		class Param1T = detail::DefaultVoid,
+		class Param2T = detail::DefaultVoid,
+		class Param3T = detail::DefaultVoid,
+		class Param4T = detail::DefaultVoid,
+		class Param5T = detail::DefaultVoid,
+		class Param6T = detail::DefaultVoid,
+		class Param7T = detail::DefaultVoid,
+		class Param8T = detail::DefaultVoid,
+		class ParamUnusedT = detail::DefaultVoid
+	>
+	struct signal;
+
+    template<>
+	struct signal<detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void>, void>
+    {
+        inline
+        result_type emit() const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))();
+            }
+        }
+        
+        inline
+        result_type operator() () const
+        {
+            return emit();
+        }
+    };
+
+    template<class Param1T>
+	struct signal<Param1T, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T>, void>::value_type value_type;
+
+        inline
+        result_type emit(Param1T p1) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1) const
+        {
+            return emit(p1);
+        }
+    };
+
+    template<class Param1T, class Param2T>
+	struct signal<Param1T, Param2T, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2) const
+        {
+            return emit(p1, p2);
+        }
+    };
+
+    template<class Param1T, class Param2T, class Param3T>
+	struct signal<Param1T, Param2T, Param3T, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T, Param3T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2, Param3T p3) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2, p3);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2, Param3T p3) const
+        {
+            return emit(p1, p2, p3);
+        }
+    };
+
+    template<class Param1T, class Param2T, class Param3T, class Param4T>
+	struct signal<Param1T, Param2T, Param3T, Param4T, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2, p3, p4);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2, Param3T p3, Param4T p4) const
+        {
+            return emit(p1, p2, p3, p4);
+        }
+    };
+
+    template<class Param1T, class Param2T, class Param3T, class Param4T, class Param5T>
+	struct signal<Param1T, Param2T, Param3T, Param4T, Param5T, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2, p3, p4, p5);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5) const
+        {
+            return emit(p1, p2, p3, p4, p5);
+        }
+    };
+
+    template<class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T>
+	struct signal<Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, detail::DefaultVoid, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2, p3, p4, p5, p6);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6) const
+        {
+            return emit(p1, p2, p3, p4, p5, p6);
+        }
+    };
+
+    template<class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T>
+	struct signal<Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, detail::DefaultVoid, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2, p3, p4, p5, p6, p7);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7) const
+        {
+            return emit(p1, p2, p3, p4, p5, p6, p7);
+        }
+    };
+
+    template<class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T, class Param8T>
+	struct signal<Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T, detail::DefaultVoid>:
+        public signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>, void>
+    {
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>, void>::result_type result_type;
+        typedef typename signal_base<delegate<void, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>, void>::value_type value_type;
+        
+        inline
+        result_type emit(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8) const
+        {
+            typedef std::set<value_type>::const_iterator const_iterator;
+
+            for (const_iterator it = _functors.begin(); it != _functors.end(); )
+            {
+                (*(it++))(p1, p2, p3, p4, p5, p6, p7, p8);
+            }
+        }
+        
+        inline
+        result_type operator() (Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8) const
+        {
+            return emit(p1, p2, p3, p4, p5, p6, p7, p8);
         }
     };
 
