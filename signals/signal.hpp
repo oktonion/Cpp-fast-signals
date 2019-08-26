@@ -185,12 +185,12 @@ namespace signals
         }
         // necessary to allow ==0 to work despite the safe_bool idiom
         inline 
-        bool operator==(StaticFunctionPtr funcptr) const
+        bool operator==(const SafeBoolStruct *) const
         {
             return empty();
         }
         inline 
-        bool operator!=(StaticFunctionPtr funcptr) const
+        bool operator!=(const SafeBoolStruct *) const
         { 
             return !empty();
         }
