@@ -22,7 +22,7 @@ void void_func_int_p(int*)
 
 struct function_class
 {
-	void void_func(){}
+	void void_func(){func_called = true;}
 };
 
 
@@ -109,6 +109,12 @@ TEST_CASE("Testing cpp signal 1") {
 		s1.connect(ptr, &void_func_void_p);
 		CHECK(s1.empty() == false);
 		CHECK(s1.disconnect(ptr, &void_func_void_p) == true);
+		CHECK(s1.empty() == true);
+
+		function_class obj;
+		s1.connect(&obj, &function_class::void_func);
+		CHECK(s1.empty() == false);
+		CHECK(s1.disconnect(&obj, &function_class::void_func) == true);
 		CHECK(s1.empty() == true);
 	}
 
