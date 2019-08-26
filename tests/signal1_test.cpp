@@ -28,7 +28,7 @@ struct function_class
 
 TEST_CASE("Testing cpp signal 1") {
 	
-    using signals::signal;
+    typedef signals::signal<> signal;
 
 	SUBCASE("signal 1 empty construction")
 	{
