@@ -155,25 +155,25 @@ namespace signals
         }
 
         inline
-        bool operator==(const signal_base &other) throw()
+        bool operator==(const signal_base &other) const throw()
         {
             return _functors == other._functors;
         }
 
         inline
-        bool operator!=(const signal_base &other) throw()
+        bool operator!=(const signal_base &other) const throw()
         {
             return _functors != other._functors;
         }
 
         inline
-        bool operator>(const signal_base &other) throw()
+        bool operator>(const signal_base &other) const throw()
         {
             return _functors > other._functors;
         }
 
         inline
-        bool operator<(const signal_base &other) throw()
+        bool operator<(const signal_base &other) const throw()
         {
             return _functors < other._functors;
         }
