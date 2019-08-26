@@ -62,7 +62,7 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK_FALSE((ss1 > s1));
 	}
 
-	SUBCASE("signal 1 connect")
+	SUBCASE("signal 1 connect and disconnect")
 	{
         signal s1;
 
@@ -71,8 +71,6 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK(s1.empty() == false);
 		CHECK(s1.disconnect(&void_func) == true);
 		CHECK(s1.empty() == true);
-
-        int a[signals::detail::type_traits::is_bind_constructible<signal::value_type, void*, void(*)(void*)>::value ? 1 : -1];
 
 		void *ptr;
 		function_class *fcl_ptr;
@@ -112,5 +110,28 @@ TEST_CASE("Testing cpp signal 1") {
 		CHECK(s1.empty() == false);
 		CHECK(s1.disconnect(ptr, &void_func_void_p) == true);
 		CHECK(s1.empty() == true);
+	}
+
+	SUBCASE("signal 1 emit")
+	{
+		signal s1;
+
+		int *ptr;
+		
+		func_called = false;
+
+		CHECK(s1.empty() == true);
+        s1.connect(ptr, &void_func_int_p);
+		CHECK(s1.empty() == false);
+
+		s1.emit();
+
+		CHECK(func_called == true);
+
+		func_called = false;
+
+		s1();
+
+		CHECK(func_called == true);
 	}
 }
