@@ -1052,6 +1052,8 @@ DOCTEST_INTERFACE String toString(int long long unsigned in);
 DOCTEST_INTERFACE String toString(std::nullptr_t in);
 #endif // DOCTEST_CONFIG_WITH_NULLPTR
 
+DOCTEST_INTERFACE template<class T> String toString(T *in);
+
 class DOCTEST_INTERFACE Approx
 {
 public:
@@ -1494,7 +1496,10 @@ namespace detail
                 res = !res;
 
             if(!res || getTestsContextState()->success)
-                return Result(res, toString(lhs));
+            {
+                String str = doctest::toString(lhs);
+                return Result(res, str);
+            }
             return Result(res);
         }
 
@@ -3764,6 +3769,14 @@ String toString(int long long unsigned in) {
 #ifdef DOCTEST_CONFIG_WITH_NULLPTR
 String toString(std::nullptr_t) { return "nullptr"; }
 #endif // DOCTEST_CONFIG_WITH_NULLPTR
+
+template<class T> 
+String toString(T *in)
+{
+    char buf[64];
+    std::sprintf(buf, "%p", in);
+    return &buf[0];
+}
 
 } // namespace doctest
 
