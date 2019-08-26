@@ -124,3 +124,9 @@ obj/
 ipch/
 
 *.obj
+Debug/*
+Release/*
+
+*.sln
+*.vcxproj*
+*.~*
