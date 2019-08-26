@@ -88,7 +88,7 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, FunctorT>::value == (true),
             connection
-        >::type connect(FunctorT functor)
+        >::type connect(FunctorT &functor)
         {
             return _connect(functor);
         }
@@ -100,9 +100,15 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             connection
-        >::type connect(Arg1T arg1, Arg2T arg2)
+        >::type connect(Arg1T &arg1, Arg2T &arg2)
         {
             return _connect(bind(arg1, arg2));
+        }
+
+        inline
+        bool disconnect(value_type functor)
+        {
+            return _disconnect(functor);
         }
 
         template<class FunctorT>
@@ -110,11 +116,9 @@ namespace signals
         typename
         detail::type_traits::enable_if<
             detail::type_traits::
-                is_bind_constructible<value_type, FunctorT>::value == (true) ||
-            detail::type_traits::
-                is_constructible<value_type, FunctorT>::value == (true),
+                is_bind_constructible<value_type, FunctorT>::value == (true),
             bool
-        >::type disconnect(FunctorT functor)
+        >::type disconnect(FunctorT &functor)
         {
             return _disconnect(functor);
         }
@@ -126,7 +130,7 @@ namespace signals
             detail::type_traits::
                 is_bind_constructible<value_type, Arg1T, Arg2T>::value == (true),
             bool
-        >::type disconnect(Arg1T arg1, Arg2T arg2)
+        >::type disconnect(Arg1T &arg1, Arg2T &arg2)
         {
             return _disconnect(bind(arg1, arg2));
         }
@@ -160,11 +164,42 @@ namespace signals
             return _functors.empty();
         }
 
+        inline 
+        bool operator!() const
+        {
+            return empty(); 
+        }
+    private:
+        typedef result_type (*StaticFunctionPtr)();
+        typedef struct SafeBoolStruct {
+            int a_data_pointer_to_this_is_0_on_buggy_compilers;
+            StaticFunctionPtr m_nonzero;
+        } UselessTypedef;
+        typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+    
+    public:
+        inline 
+        operator unspecified_bool_type() const 
+        {
+            return empty()? 0: &SafeBoolStruct::m_nonzero;
+        }
+        // necessary to allow ==0 to work despite the safe_bool idiom
+        inline 
+        bool operator==(StaticFunctionPtr funcptr) const
+        {
+            return empty();
+        }
+        inline 
+        bool operator!=(StaticFunctionPtr funcptr) const
+        { 
+            return !empty();
+        }
+
     private:
         std::set<value_type> _functors;
 
         inline
-        connection _connect(value_type value)
+        connection _connect(const value_type &value)
         {
             _functors.insert(value);
             return connection();
@@ -178,7 +213,7 @@ namespace signals
         }
 
         inline
-        bool _disconnect(value_type value)
+        bool _disconnect(const value_type &value)
         {
             std::set<value_type>::size_type size = _functors.size();
             _functors.erase(value);
