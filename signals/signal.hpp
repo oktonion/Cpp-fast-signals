@@ -51,10 +51,9 @@ namespace signals
         signal_base() {}
 
         inline
-        signal_base(const signal_base &other) 
-        {
-            _functors = other._functors;
-        }
+        signal_base(const signal_base &other) :
+			_functors(other._functors)
+        { }
 
         inline
         ~signal_base() {}
