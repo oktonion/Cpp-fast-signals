@@ -53,8 +53,7 @@ namespace signals
         inline
         signal_base(const signal_base &other) 
         {
-            signal_base tmp = other;
-            swap(tmp);
+            _functors = other._functors;
         }
 
         inline
@@ -71,8 +70,7 @@ namespace signals
         inline
         signal_base& operator=(const signal_base &other)
         {
-            signal_base tmp = other;
-            swap(tmp);
+            _functors = other._functors;
             return *this;
         }
         
