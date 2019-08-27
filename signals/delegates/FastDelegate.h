@@ -52,6 +52,7 @@
 #endif // _MSC_VER > 1000
 
 #include <memory.h> // to allow <,> comparisons
+#include <cstring>
 
 ////////////////////////////////////////////////////////////////////////////////
 //						Configuration options
@@ -605,6 +606,7 @@ public:
 	// There are no ordering operators for member function pointers, 
 	// but we can fake one by comparing each byte. The resulting ordering is
 	// arbitrary (and compiler-dependent), but it permits storage in ordered STL containers.
+		using namespace std;
 		return memcmp(&m_pFunction, &right.m_pFunction, sizeof(m_pFunction)) < 0;
 
 	}
