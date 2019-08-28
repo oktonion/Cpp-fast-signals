@@ -141,7 +141,7 @@ TEST_CASE("Testing cpp signal 1") {
 
 		CHECK(func_called == true);
 
-        CHECK(s1.disconnect(d1) == true);
+        CHECK(s1.disconnect(ptr, &void_func_int_p) == true);
         CHECK(s1.empty() == true);
 
         func_called = false;
