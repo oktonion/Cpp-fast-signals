@@ -140,5 +140,17 @@ TEST_CASE("Testing cpp signal 1") {
 		s1();
 
 		CHECK(func_called == true);
+
+        CHECK(s1.disconnect(d1) == true);
+        CHECK(s1.empty() == true);
+
+        func_called = false;
+
+        function_class obj;
+        s1.connect(&obj, &function_class::void_func);
+
+        s1();
+
+        CHECK(func_called == true);
 	}
 }
